@@ -16,6 +16,7 @@ pipeline:
     options: |
       - inherit: helloqa.keyterm.simple
       - inherit: hellobioqa.team09.spalkar-simple-keyterm
+      - inherit: hellobioqa.team09.keyterm-martinv	  
 
   - inherit: jdbc.sqlite.cse.phase 
     name: retrieval-strategist
