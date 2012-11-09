@@ -19,7 +19,7 @@ pipeline:
       - inherit: hellobioqa.team09.spalkar-pos-keyterm
       - inherit: hellobioqa.team09.keyterm-martinv
       - inherit: hellobioqa.team09.lingpeng-simple-keyterm
-      - inherit: hellobioqa.team09.kenneth-keyterm.yaml	  
+      - inherit: hellobioqa.team09.kenneth-keyterm	  
 
   - inherit: jdbc.sqlite.cse.phase 
     name: retrieval-strategist
