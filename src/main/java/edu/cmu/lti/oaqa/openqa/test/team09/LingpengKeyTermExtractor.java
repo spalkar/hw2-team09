@@ -26,7 +26,7 @@ public class LingpengKeyTermExtractor extends AbstractKeytermExtractor {
 
   public void init() {
     File modelFile;
-    modelFile = new File("src/main/resources/model/GenTagHMM");
+    modelFile = new File("src/main/resources/model/GenTagHmm");
     // System.out.println("*************"+modelFile.getAbsolutePath());
     // System.out.println("*************"+Thread.currentThread().getContextClassLoader().getResource(""));
     try {
