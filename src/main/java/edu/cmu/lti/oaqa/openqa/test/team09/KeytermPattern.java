@@ -194,6 +194,7 @@ public class KeytermPattern extends ModifiedAbstractKeytermExtractor
 						debug ("Found keyword: " + aToken);
 						
 						GenePattern aPattern=new GenePattern ();
+						aPattern.setSentence(question);
 						aPattern.setScore((float) 1.0);
 						
 						StringArray terms=aPattern.getKeyterms();

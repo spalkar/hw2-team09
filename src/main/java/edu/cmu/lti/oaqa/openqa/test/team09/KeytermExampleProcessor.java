@@ -77,6 +77,7 @@ public class KeytermExampleProcessor extends JCasAnnotator_ImplBase
 				// REPLACE WITH YOUR CODE ...
 				
 				debug ("Pattern score: " + aPattern.getScore());
+				debug ("Pattern sentence: " + aPattern.getSentence());
 				
 				StringArray keyterms=aPattern.getKeyterms();
 				

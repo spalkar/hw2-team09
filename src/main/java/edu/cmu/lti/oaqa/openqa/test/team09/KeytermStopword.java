@@ -109,6 +109,7 @@ public class KeytermStopword extends ModifiedAbstractKeytermExtractor
 			if (isGarbage(aToken) == false) 
 			{							
 				GenePattern aPattern=new GenePattern ();
+				aPattern.setSentence(question);
 				aPattern.setScore((float) 1.0);
 				
 				StringArray terms=aPattern.getKeyterms();
