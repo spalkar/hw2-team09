@@ -11,8 +11,16 @@ collection-reader:
   file: /input/trecgen06.txt
 
 pipeline:
+
   - inherit: jdbc.sqlite.cse.phase  
     name: keyterm-extractor
+    options: |
+      - inherit: helloqa.keyterm.simple
+      - inherit: hellobioqa.team09.keyterm-stopword
+      - inherit: hellobioqa.team09.keyterm-pattern
+
+  - inherit: jdbc.sqlite.cse.phase  
+    name: keyterm-processor
     options: |
       - inherit: helloqa.keyterm.simple
       - inherit: hellobioqa.team09.spalkar-simple-keyterm
