@@ -22,13 +22,15 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.apache.uima.UimaContext;
+import org.apache.uima.jcas.cas.StringArray;
 import org.apache.uima.resource.ResourceInitializationException;
 
-import edu.cmu.lti.oaqa.framework.data.Keyterm;
-import edu.cmu.lti.oaqa.openqa.test.team09.martinv.GenBase;
-import edu.cmu.lti.oaqa.openqa.test.team09.martinv.GenResourceLoader;
-//import edu.cmu.lti.oaqa.mergeqa.keyterm.AbstractKeytermExtractor;
 import edu.cmu.lti.oaqa.cse.basephase.keyterm.AbstractKeytermExtractor;
+import edu.cmu.lti.oaqa.framework.data.Keyterm;
+//import edu.cmu.lti.oaqa.framework.data.Keyterm;
+import edu.cmu.lti.oaqa.openqa.test.team09.martinv.GenBase;
+import edu.cmu.lti.oaqa.openqa.test.team09.martinv.GenPatternTools;
+import edu.cmu.lti.oaqa.openqa.test.team09.martinv.GenResourceLoader;
 
 /**
  * 
@@ -47,10 +49,6 @@ public class KeytermPattern extends AbstractKeytermExtractor
 		}
 	}	
 	
-	// private String stopwordFile="src/main/resources/data/stoplist.txt";
-	// private String patternFile="src/main/resources/data/patterns-raw.txt";
-	// private String stubFile="src/main/resources/data/stubs.txt";
-
 	private String stopwordFile = "data/stoplist.txt";
 	private String patternFile = "data/patterns-raw.txt";
 	private String stubFile = "data/stubs.txt";
@@ -63,7 +61,7 @@ public class KeytermPattern extends AbstractKeytermExtractor
 	 * Internal method accessing Hoop debugging
 	 */
 	private void debug(String aMessage) {
-		GenBase.debug("KeytermMartinv", aMessage);
+		GenBase.debug("KeytermPattern", aMessage);
 	}	
 	/** 
 	 * @param aContext
@@ -130,14 +128,16 @@ public class KeytermPattern extends AbstractKeytermExtractor
 
 		lines = text.split("\\n");
 
-		for (i = 0; i < lines.length; i++) {
+		for (i = 0; i < lines.length; i++) 
+		{
 			String aSeq = lines[i];
 
 			GenTokenSequence newTokenSequence = new GenTokenSequence();
 
 			String terms[] = aSeq.split("\\s+");
 
-			for (int j = 0; j < terms.length; j++) {
+			for (int j = 0; j < terms.length; j++) 
+			{
 				newTokenSequence.tokens.add(terms[j]);
 			}
 
@@ -161,26 +161,7 @@ public class KeytermPattern extends AbstractKeytermExtractor
 		debug ("getKeyterms ("+question+")");
 		
 		List<Keyterm> keyterms = new ArrayList<Keyterm>();
-		
-		/**
-	    question = question.replace('?', ' ');
-	    question = question.replace('(', ' ');
-	    question = question.replace('[', ' ');
-	    question = question.replace(')', ' ');
-	    question = question.replace(']', ' ');
-	    question = question.replace('/', ' ');
-	    question = question.replace('\'', ' ');
-
-	    String[] questionTokens = question.split("\\s+");
-	    
-	    List<Keyterm> keyterms = new ArrayList<Keyterm>();
-	    
-	    for (int i = 0; i < questionTokens.length; i++) 
-	    {
-	      keyterms.add(new Keyterm(questionTokens[i]));
-	    }
-	    */
-		
+				
 		// Let's add a basic sanity check by changing the whole sentence
 		// to lower case
 
@@ -192,56 +173,64 @@ public class KeytermPattern extends AbstractKeytermExtractor
 
 		int index = 0;
 
-		for (int i = 0; i < cleanedTokens.size(); i++) {
-			// String aToken=cleanRawToken (split [i]);
-
+		for (int i = 0; i < cleanedTokens.size(); i++) 
+		{
 			String aToken = cleanedTokens.get(i);
 
 			// debug (aToken);
 
-			// Boolean tossed=false;
-
 			// First pass, remove garbage ...
 
-			if (isGarbage(aToken) == false) {
-				String fullGene = isMatchedGene(aToken, cleanedTokens,
-						i);
+			if (isGarbage(aToken) == false) 
+			{
+				String fullGene = isMatchedGene(aToken, cleanedTokens,	i);
 
-				if (fullGene == null) // Nothing found, go for the
-										// backup ...
+				// Nothing found, go for the backup ...
+				if (fullGene == null)
 				{
 					if (isStub(aToken) == true) 
-					{
-						/*
-						Gene newGene = new Gene(aJCas);
-						newGene.setBegin(index);
-						newGene.setEnd((index + aToken.length()));
-						newGene.setID(aSentence.getID());
-						newGene.setName(aToken);
-						newGene.addToIndexes();
-						*/
-						
+					{						
 						debug ("Found keyword: " + aToken);
 						
-						keyterms.add(new Keyterm(aToken));						
+						/**
+						GenePattern aPattern=new GenePattern ();
+						aPattern.setSentence(question);
+						aPattern.setScore((float) 1.0);
+						
+						StringArray terms=aPattern.getKeyterms();
+						terms.set(0,aToken);
+
+						keyterms.add(aPattern);
+						*/
+						
+						ArrayList<String> termList=new ArrayList<String> ();
+						termList.add(aToken);
+						
+						Keyterm aPattern=GenPatternTools.encodeKeyterm(question,(float) 1.0,termList);
+						
+						keyterms.add(aPattern);						
 					}
-					// else
-					// debug ("Bottoming out for: " + aToken);
 				} 
 				else 
 				{
-					/*
-					Gene newGene = new Gene(aJCas);
-					newGene.setBegin(index);
-					newGene.setEnd((index + fullGene.length()));
-					newGene.setID(aSentence.getID());
-					newGene.setName(fullGene);
-					newGene.addToIndexes();
-					*/
-					
 					debug ("Found keyword: " + fullGene);
 					
-					keyterms.add(new Keyterm(fullGene));		
+					/*
+					GenePattern aPattern=new GenePattern ();
+					aPattern.setScore((float) 1.0);
+					
+					StringArray terms=aPattern.getKeyterms();
+					terms.set(0,fullGene);
+
+					keyterms.add(aPattern);
+					*/
+					
+					ArrayList<String> termList=new ArrayList<String> ();
+					termList.add(fullGene);
+					
+					Keyterm aPattern=GenPatternTools.encodeKeyterm(question,(float) 1.0,termList);
+					
+					keyterms.add(aPattern);
 				}
 			}
 
@@ -249,7 +238,6 @@ public class KeytermPattern extends AbstractKeytermExtractor
 			index++; // don't forget the white space
 		}		
 		
-
 	    return keyterms;
 	}
 	/**

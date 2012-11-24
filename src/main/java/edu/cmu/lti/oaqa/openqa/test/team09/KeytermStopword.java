@@ -21,12 +21,16 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.apache.uima.UimaContext;
+import org.apache.uima.jcas.cas.StringArray;
 import org.apache.uima.resource.ResourceInitializationException;
 
-import edu.cmu.lti.oaqa.framework.data.Keyterm;
-import edu.cmu.lti.oaqa.openqa.test.team09.martinv.GenBase;
-import edu.cmu.lti.oaqa.openqa.test.team09.martinv.GenResourceLoader;
 import edu.cmu.lti.oaqa.cse.basephase.keyterm.AbstractKeytermExtractor;
+import edu.cmu.lti.oaqa.framework.data.Keyterm;
+//import edu.cmu.lti.oaqa.framework.data.Keyterm;
+import edu.cmu.lti.oaqa.openqa.test.team09.martinv.GenBase;
+import edu.cmu.lti.oaqa.openqa.test.team09.martinv.GenPatternTools;
+import edu.cmu.lti.oaqa.openqa.test.team09.martinv.GenResourceLoader;
+//import edu.cmu.lti.oaqa.cse.basephase.keyterm.AbstractKeytermExtractor;
 
 /**
  * 
@@ -106,8 +110,13 @@ public class KeytermStopword extends AbstractKeytermExtractor
 			// First pass, remove garbage ...
 
 			if (isGarbage(aToken) == false) 
-			{			
-				keyterms.add(new Keyterm(aToken));						
+			{											
+				ArrayList<String> termList=new ArrayList<String> ();
+				termList.add(aToken);
+				
+				Keyterm aPattern=GenPatternTools.encodeKeyterm(question,(float) 1.0,termList);
+				
+				keyterms.add(aPattern);
 			}
 
 			index += aToken.length();
