@@ -34,49 +34,52 @@ import edu.cmu.lti.oaqa.openqa.test.team09.martinv.GenPatternTools;
 /**
  * 
  */
-public class KeytermExampleProcessor extends KeytermExampleProcessorBase
-{
+public abstract class KeytermExampleProcessorBase extends JCasAnnotator_ImplBase 
+{		
+	protected abstract void processPattern (JCas aJCas,GenPattern aPattern);
+	
 	/**
 	 * Internal method accessing Hoop debugging
 	 */
 	private void debug(String aMessage) 
 	{
-		GenBase.debug("KeytermExampleProcessor", aMessage);
+		GenBase.debug("KeytermExampleProcessorBase", aMessage);
+	}	
+	/** 
+	 * @param aContext
+	 * @throws ResourceInitializationException
+	 */
+	@Override
+	public void initialize(UimaContext aContext) throws ResourceInitializationException 
+	{
+		debug ("initialize ()");		
+		super.initialize(aContext);				
 	}		
 	/**
 	 * 
 	 */
-	protected void processPattern(JCas aJCas,GenPattern aPattern) 
+	public void process(JCas aJCas) throws AnalysisEngineProcessException 
 	{
-		List<Keyterm> keytermResults = new ArrayList<Keyterm>();
-		
-		// REPLACE WITH YOUR CODE ...
-		
-		debug ("Pattern score: " + aPattern.score);
-		debug ("Pattern sentence: " + aPattern.sentence);
-
-		ArrayList <String> terms=aPattern.keyterms;
-		
-		// As you iterate through the terms please be aware that
-		// order is important!
-		
-		for (int i=0;i<terms.size();i++)
-		{
-			String aTerm=terms.get(i);
+		debug("process ()");
+				
+		try
+		{	
+			List<Keyterm> keyterms = KeytermList.retrieveKeyterms(aJCas);
 			
-			Keyterm newTerm=new Keyterm (aTerm);
-			keytermResults.add(newTerm);
-		}
+			for (int j=0;j<keyterms.size();j++) 
+			{
+				Keyterm aKeyterm = (Keyterm) keyterms.get(j);
 
-		try 
-		{
-			KeytermList.storeKeyterms(aJCas, keytermResults);
+				debug("Processing pattern for sentence: " +  aKeyterm.getText());
+		
+				GenPattern newPattern=GenPatternTools.decodeKeyterm(aKeyterm);
+				
+				processPattern (aJCas,newPattern);
+			}	
 		} 
 		catch (Exception e) 
 		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}		
-	}		
-
+			throw new AnalysisEngineProcessException(e);
+		}						      	
+	}
 }

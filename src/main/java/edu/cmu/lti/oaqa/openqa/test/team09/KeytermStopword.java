@@ -24,15 +24,18 @@ import org.apache.uima.UimaContext;
 import org.apache.uima.jcas.cas.StringArray;
 import org.apache.uima.resource.ResourceInitializationException;
 
+import edu.cmu.lti.oaqa.cse.basephase.keyterm.AbstractKeytermExtractor;
 import edu.cmu.lti.oaqa.framework.data.Keyterm;
+//import edu.cmu.lti.oaqa.framework.data.Keyterm;
 import edu.cmu.lti.oaqa.openqa.test.team09.martinv.GenBase;
+import edu.cmu.lti.oaqa.openqa.test.team09.martinv.GenPatternTools;
 import edu.cmu.lti.oaqa.openqa.test.team09.martinv.GenResourceLoader;
 //import edu.cmu.lti.oaqa.cse.basephase.keyterm.AbstractKeytermExtractor;
 
 /**
  * 
  */
-public class KeytermStopword extends ModifiedAbstractKeytermExtractor 
+public class KeytermStopword extends AbstractKeytermExtractor 
 {	
 	private String stopwordFile = "data/stoplist.txt";
 
@@ -83,11 +86,11 @@ public class KeytermStopword extends ModifiedAbstractKeytermExtractor
 	 * @return
 	 */
 	@Override
-	protected List<GenePattern> getKeyterms(String question) 
+	protected List<Keyterm> getKeyterms(String question) 
 	{						
 		debug ("getKeyterms ("+question+")");
 		
-		List<GenePattern> keyterms = new ArrayList<GenePattern>();
+		List<Keyterm> keyterms = new ArrayList<Keyterm>();
 		
 		// Let's add a basic sanity check by changing the whole sentence
 		// to lower case
@@ -107,14 +110,12 @@ public class KeytermStopword extends ModifiedAbstractKeytermExtractor
 			// First pass, remove garbage ...
 
 			if (isGarbage(aToken) == false) 
-			{							
-				GenePattern aPattern=new GenePattern ();
-				aPattern.setSentence(question);
-				aPattern.setScore((float) 1.0);
+			{											
+				ArrayList<String> termList=new ArrayList<String> ();
+				termList.add(aToken);
 				
-				StringArray terms=aPattern.getKeyterms();
-				terms.set(0,aToken);
-
+				Keyterm aPattern=GenPatternTools.encodeKeyterm(question,(float) 1.0,termList);
+				
 				keyterms.add(aPattern);
 			}
 

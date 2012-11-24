@@ -25,14 +25,17 @@ import org.apache.uima.UimaContext;
 import org.apache.uima.jcas.cas.StringArray;
 import org.apache.uima.resource.ResourceInitializationException;
 
+import edu.cmu.lti.oaqa.cse.basephase.keyterm.AbstractKeytermExtractor;
 import edu.cmu.lti.oaqa.framework.data.Keyterm;
+//import edu.cmu.lti.oaqa.framework.data.Keyterm;
 import edu.cmu.lti.oaqa.openqa.test.team09.martinv.GenBase;
+import edu.cmu.lti.oaqa.openqa.test.team09.martinv.GenPatternTools;
 import edu.cmu.lti.oaqa.openqa.test.team09.martinv.GenResourceLoader;
 
 /**
  * 
  */
-public class KeytermPattern extends ModifiedAbstractKeytermExtractor 
+public class KeytermPattern extends AbstractKeytermExtractor 
 {
 	public class GenTokenSequence implements Serializable 
 	{
@@ -46,10 +49,6 @@ public class KeytermPattern extends ModifiedAbstractKeytermExtractor
 		}
 	}	
 	
-	// private String stopwordFile="src/main/resources/data/stoplist.txt";
-	// private String patternFile="src/main/resources/data/patterns-raw.txt";
-	// private String stubFile="src/main/resources/data/stubs.txt";
-
 	private String stopwordFile = "data/stoplist.txt";
 	private String patternFile = "data/patterns-raw.txt";
 	private String stubFile = "data/stubs.txt";
@@ -157,11 +156,11 @@ public class KeytermPattern extends ModifiedAbstractKeytermExtractor
 	 * @return
 	 */
 	@Override
-	protected List<GenePattern> getKeyterms(String question) 
+	protected List<Keyterm> getKeyterms(String question) 
 	{						
 		debug ("getKeyterms ("+question+")");
 		
-		List<GenePattern> keyterms = new ArrayList<GenePattern>();
+		List<Keyterm> keyterms = new ArrayList<Keyterm>();
 				
 		// Let's add a basic sanity check by changing the whole sentence
 		// to lower case
@@ -193,6 +192,7 @@ public class KeytermPattern extends ModifiedAbstractKeytermExtractor
 					{						
 						debug ("Found keyword: " + aToken);
 						
+						/**
 						GenePattern aPattern=new GenePattern ();
 						aPattern.setSentence(question);
 						aPattern.setScore((float) 1.0);
@@ -200,20 +200,37 @@ public class KeytermPattern extends ModifiedAbstractKeytermExtractor
 						StringArray terms=aPattern.getKeyterms();
 						terms.set(0,aToken);
 
-						keyterms.add(aPattern);					
+						keyterms.add(aPattern);
+						*/
+						
+						ArrayList<String> termList=new ArrayList<String> ();
+						termList.add(aToken);
+						
+						Keyterm aPattern=GenPatternTools.encodeKeyterm(question,(float) 1.0,termList);
+						
+						keyterms.add(aPattern);						
 					}
 				} 
 				else 
 				{
 					debug ("Found keyword: " + fullGene);
 					
+					/*
 					GenePattern aPattern=new GenePattern ();
 					aPattern.setScore((float) 1.0);
 					
 					StringArray terms=aPattern.getKeyterms();
 					terms.set(0,fullGene);
 
-					keyterms.add(aPattern);		
+					keyterms.add(aPattern);
+					*/
+					
+					ArrayList<String> termList=new ArrayList<String> ();
+					termList.add(fullGene);
+					
+					Keyterm aPattern=GenPatternTools.encodeKeyterm(question,(float) 1.0,termList);
+					
+					keyterms.add(aPattern);
 				}
 			}
 
