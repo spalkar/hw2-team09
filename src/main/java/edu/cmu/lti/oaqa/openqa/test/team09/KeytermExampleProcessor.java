@@ -50,16 +50,51 @@ public class KeytermExampleProcessor extends KeytermExampleProcessorBase
 	{
 		List<Keyterm> keytermResults = new ArrayList<Keyterm>();
 		
+		Keyterm newTerm=null;
+		
 		// REPLACE WITH YOUR CODE ...
 		
 		if (aPattern.questionType==GenPattern.QUESTIONWHAT)
+		{
 			debug ("Pattern question type is: what");
+			
+			// Very basic question reformulation by adding keywords, 
+			// replace or take out if you like
+			
+			newTerm=new Keyterm ("What");
+			keytermResults.add(newTerm);
+			
+			newTerm=new Keyterm ("is");
+			keytermResults.add(newTerm);
+		}
 		
 		if (aPattern.questionType==GenPattern.QUESTIONHOW)
+		{
 			debug ("Pattern question type is: how");
+
+			// Very basic question reformulation by adding keywords, 
+			// replace or take out if you like
+			
+			newTerm=new Keyterm ("How");
+			keytermResults.add(newTerm);
+			
+			newTerm=new Keyterm ("is");
+			keytermResults.add(newTerm);			
+		}
 		
 		if (aPattern.questionType==GenPattern.QUESTIONGENERIC)
+		{
 			debug ("Pattern question type is: generic");
+			
+			// Very basic question reformulation by adding keywords, 
+			// replace or take out if you like
+			
+			newTerm=new Keyterm ("What");
+			keytermResults.add(newTerm);
+			
+			newTerm=new Keyterm ("is");
+			keytermResults.add(newTerm);
+		}
 		
 		debug ("Pattern score: " + aPattern.score);
 		debug ("Pattern sentence: " + aPattern.sentence);
@@ -73,7 +108,7 @@ public class KeytermExampleProcessor extends KeytermExampleProcessorBase
 		{
 			String aTerm=terms.get(i);
 			
-			Keyterm newTerm=new Keyterm (aTerm);
+			newTerm=new Keyterm (aTerm);
 			keytermResults.add(newTerm);
 		}
 
