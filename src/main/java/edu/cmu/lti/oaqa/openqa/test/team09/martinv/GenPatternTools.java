@@ -40,7 +40,7 @@ public class GenPatternTools extends GenBase
 	 */
 	public static Keyterm encodeKeyterm (String aSentence,float aScore,ArrayList <String>aTerms)
 	{		
-		GenBase.debug("GenPatternTools","encodeKeyterm ()");
+		//GenBase.debug("GenPatternTools","encodeKeyterm ()");
 		
 		StringBuffer formatter=new StringBuffer ();
 		
@@ -80,7 +80,7 @@ public class GenPatternTools extends GenBase
 	 */
 	public static GenPattern decodeKeyterm (Keyterm aKeyterm)
 	{
-		GenBase.debug("GenPatternTools","decodeKeyterm ("+aKeyterm.getText()+")");
+		//GenBase.debug("GenPatternTools","decodeKeyterm ("+aKeyterm.getText()+")");
 		
 		GenPattern newPattern=new GenPattern ();
 		

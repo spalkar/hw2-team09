@@ -1,4 +1,7 @@
-﻿ 5'  - oligoadenylate synthetases
+﻿apolipoprotein
+Bop
+Pes 
+ 5'  - oligoadenylate synthetases
 beta - xylan endohydrolase isoenzyme X - I
 2Fe - 2S plant - like ferredoxins
 AC N - acylsphingosine amidohydrolase
@@ -365,6 +368,7 @@ ADE2
 adenine - DNA glycosylase
 adeno - associated virus (AAV) rep gene
 adeno - associated virus P5 promoter
+adenomatous polyposis coli
 adenosine deaminase
 adenoviral 12S E1A protein
 adenovirus 2/5 E1a protein

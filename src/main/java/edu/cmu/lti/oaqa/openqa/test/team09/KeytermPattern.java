@@ -22,7 +22,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.uima.UimaContext;
@@ -51,7 +50,8 @@ public class KeytermPattern extends AbstractKeytermExtractor
 		}
 	}	
 	
-	private static final String stubPattern ="[A-Z]*[0-9]*"; //alpha-numeric uppercase
+	private static final String stubPatternMain ="[A-Z]+-*[A-Z]*[0-9]*"; //alpha-numeric uppercase
+	private static final String stubPatternSecondary ="[a-zA-Z]+-[0-9]*"; //alpha-numeric uppercase
 	
 	private String stopwordFile = "data/stoplist.txt";
 	private String patternFile = "data/patterns-raw.txt";
@@ -165,19 +165,13 @@ public class KeytermPattern extends AbstractKeytermExtractor
 	 */
 	@Override
 	protected List<Keyterm> getKeyterms(String question) 
-	{						
-		debug ("getKeyterms ("+question+")");
+	{			
+		String cleaned = KeytermStringTools.stringExpansion (question);
+		
+		debug ("getKeyterms ("+cleaned+")");
 		
 		List<Keyterm> keyterms = new ArrayList<Keyterm>();
-				
-		// Let's add a basic sanity check by changing the whole sentence
-		// to lower case
-
-		//String cleaned = question.toLowerCase();
-		String cleaned = question;
-		
-		//debug ("Cleaned: " + cleaned);
-
+												
 		String[] split = cleaned.split("\\s+");
 
 		ArrayList<String> cleanedTokens = cleanTokens(split);
@@ -207,7 +201,7 @@ public class KeytermPattern extends AbstractKeytermExtractor
 						ArrayList<String> termList=new ArrayList<String> ();
 						termList.add(aToken);
 						
-						Keyterm aPattern=GenPatternTools.encodeKeyterm(question,(float) 1.0,termList);
+						Keyterm aPattern=GenPatternTools.encodeKeyterm(cleaned,(float) 1.0,termList);
 						
 						keyterms.add(aPattern);						
 					}
@@ -219,7 +213,7 @@ public class KeytermPattern extends AbstractKeytermExtractor
 					ArrayList<String> termList=new ArrayList<String> ();
 					termList.add(fullGene);
 					
-					Keyterm aPattern=GenPatternTools.encodeKeyterm(question,(float) 1.0,termList);
+					Keyterm aPattern=GenPatternTools.encodeKeyterm(cleaned,(float) 1.0,termList);
 					
 					keyterms.add(aPattern);
 				}
@@ -272,7 +266,10 @@ public class KeytermPattern extends AbstractKeytermExtractor
 	{
 		//debug ("isUpperCase ("+str+")");
 	
-		boolean result=Pattern.matches(stubPattern,str);
+		boolean result=Pattern.matches(stubPatternMain,str);
+		
+		if (result==false)
+			result=Pattern.matches(stubPatternSecondary, str);
 		
 		//debug ("Result: " + result);
 

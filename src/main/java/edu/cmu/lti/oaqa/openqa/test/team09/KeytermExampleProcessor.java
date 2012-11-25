@@ -48,6 +48,8 @@ public class KeytermExampleProcessor extends KeytermExampleProcessorBase
 	 */
 	protected void processPattern(JCas aJCas,GenPattern aPattern) 
 	{
+		debug ("processPattern ()");
+		
 		List<Keyterm> keytermResults = new ArrayList<Keyterm>();
 		
 		Keyterm newTerm=null;
@@ -56,7 +58,7 @@ public class KeytermExampleProcessor extends KeytermExampleProcessorBase
 		
 		if (aPattern.questionType==GenPattern.QUESTIONWHAT)
 		{
-			debug ("Pattern question type is: what");
+			//debug ("Pattern question type is: what");
 			
 			// Very basic question reformulation by adding keywords, 
 			// replace or take out if you like
@@ -70,7 +72,7 @@ public class KeytermExampleProcessor extends KeytermExampleProcessorBase
 		
 		if (aPattern.questionType==GenPattern.QUESTIONHOW)
 		{
-			debug ("Pattern question type is: how");
+			//debug ("Pattern question type is: how");
 
 			// Very basic question reformulation by adding keywords, 
 			// replace or take out if you like
@@ -78,26 +80,28 @@ public class KeytermExampleProcessor extends KeytermExampleProcessorBase
 			newTerm=new Keyterm ("How");
 			keytermResults.add(newTerm);
 			
-			newTerm=new Keyterm ("is");
+			newTerm=new Keyterm ("does");
 			keytermResults.add(newTerm);			
 		}
 		
 		if (aPattern.questionType==GenPattern.QUESTIONGENERIC)
 		{
-			debug ("Pattern question type is: generic");
+			//debug ("Pattern question type is: generic");
 			
 			// Very basic question reformulation by adding keywords, 
 			// replace or take out if you like
 			
+			/*
 			newTerm=new Keyterm ("What");
 			keytermResults.add(newTerm);
 			
 			newTerm=new Keyterm ("is");
 			keytermResults.add(newTerm);
+			*/
 		}
 		
-		debug ("Pattern score: " + aPattern.score);
-		debug ("Pattern sentence: " + aPattern.sentence);
+		//debug ("Pattern score: " + aPattern.score);
+		//debug ("Pattern sentence: " + aPattern.sentence);
 
 		ArrayList <String> terms=aPattern.keyterms;
 		
