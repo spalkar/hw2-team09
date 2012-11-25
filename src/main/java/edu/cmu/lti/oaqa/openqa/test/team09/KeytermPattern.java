@@ -166,7 +166,8 @@ public class KeytermPattern extends AbstractKeytermExtractor
 	@Override
 	protected List<Keyterm> getKeyterms(String question) 
 	{			
-		String cleaned = KeytermStringTools.stringExpansion (question);
+		//String cleaned = KeytermStringTools.stringExpansion (question);
+		String cleaned = question;
 		
 		debug ("getKeyterms ("+cleaned+")");
 		
