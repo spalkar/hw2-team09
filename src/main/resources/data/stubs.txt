@@ -1,4 +1,4 @@
-alk
+﻿alk
 glut
 carb
 anhy
@@ -15,3 +15,4 @@ enase
 cerul
 thromb
 kalli
+prnp

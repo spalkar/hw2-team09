@@ -19,15 +19,17 @@ package edu.cmu.lti.oaqa.openqa.test.team09;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.uima.UimaContext;
-import org.apache.uima.jcas.cas.StringArray;
 import org.apache.uima.resource.ResourceInitializationException;
 
 import edu.cmu.lti.oaqa.cse.basephase.keyterm.AbstractKeytermExtractor;
 import edu.cmu.lti.oaqa.framework.data.Keyterm;
-//import edu.cmu.lti.oaqa.framework.data.Keyterm;
 import edu.cmu.lti.oaqa.openqa.test.team09.martinv.GenBase;
 import edu.cmu.lti.oaqa.openqa.test.team09.martinv.GenPatternTools;
 import edu.cmu.lti.oaqa.openqa.test.team09.martinv.GenResourceLoader;
@@ -49,6 +51,8 @@ public class KeytermPattern extends AbstractKeytermExtractor
 		}
 	}	
 	
+	private static final String stubPattern ="[A-Z]*[0-9]*"; //alpha-numeric uppercase
+	
 	private String stopwordFile = "data/stoplist.txt";
 	private String patternFile = "data/patterns-raw.txt";
 	private String stubFile = "data/stubs.txt";
@@ -56,11 +60,12 @@ public class KeytermPattern extends AbstractKeytermExtractor
 	private HashMap<String, Integer> stopList = null;
 	private ArrayList<GenTokenSequence> matchTokens = null;
 	private ArrayList<String> stubs = null;
-	
+		
 	/**
 	 * Internal method accessing Hoop debugging
 	 */
-	private void debug(String aMessage) {
+	private void debug(String aMessage) 
+	{
 		GenBase.debug("KeytermPattern", aMessage);
 	}	
 	/** 
@@ -88,9 +93,10 @@ public class KeytermPattern extends AbstractKeytermExtractor
 
 		String lines[] = text.split("\\n");
 
-		for (i = 0; i < lines.length; i++) {
+		for (i = 0; i < lines.length; i++) 
+		{
 			String aWord = lines[i];
-			stopList.put(aWord.toLowerCase(), i);
+			stopList.put(aWord.toLowerCase().trim(), i);
 		}
 
 		debug("Loaded " + stopList.size() + " stopwords");
@@ -118,6 +124,8 @@ public class KeytermPattern extends AbstractKeytermExtractor
 		// >----------------------------------------------------------
 
 		text = loader.getTextResource2(patternFile);
+		
+		//debug (text);
 
 		if (text == null) {
 			debug("Input error, unable to read pattern file: " + patternFile);
@@ -145,11 +153,11 @@ public class KeytermPattern extends AbstractKeytermExtractor
 		}
 
 		debug("Loaded " + matchTokens.size() + " patterns");		
+		
+		//printGenePatterns ();
+		
+		//printStopwords (stopList);
 	}	
-	/**
-	 * 
-	 */
-	
 	/**
 	 * 
 	 * @param question
@@ -165,7 +173,10 @@ public class KeytermPattern extends AbstractKeytermExtractor
 		// Let's add a basic sanity check by changing the whole sentence
 		// to lower case
 
-		String cleaned = question.toLowerCase();
+		//String cleaned = question.toLowerCase();
+		String cleaned = question;
+		
+		//debug ("Cleaned: " + cleaned);
 
 		String[] split = cleaned.split("\\s+");
 
@@ -177,7 +188,7 @@ public class KeytermPattern extends AbstractKeytermExtractor
 		{
 			String aToken = cleanedTokens.get(i);
 
-			// debug (aToken);
+			//debug (aToken);
 
 			// First pass, remove garbage ...
 
@@ -186,23 +197,13 @@ public class KeytermPattern extends AbstractKeytermExtractor
 				String fullGene = isMatchedGene(aToken, cleanedTokens,	i);
 
 				// Nothing found, go for the backup ...
+				
 				if (fullGene == null)
 				{
 					if (isStub(aToken) == true) 
 					{						
 						debug ("Found keyword: " + aToken);
-						
-						/**
-						GenePattern aPattern=new GenePattern ();
-						aPattern.setSentence(question);
-						aPattern.setScore((float) 1.0);
-						
-						StringArray terms=aPattern.getKeyterms();
-						terms.set(0,aToken);
-
-						keyterms.add(aPattern);
-						*/
-						
+												
 						ArrayList<String> termList=new ArrayList<String> ();
 						termList.add(aToken);
 						
@@ -213,17 +214,7 @@ public class KeytermPattern extends AbstractKeytermExtractor
 				} 
 				else 
 				{
-					debug ("Found keyword: " + fullGene);
-					
-					/*
-					GenePattern aPattern=new GenePattern ();
-					aPattern.setScore((float) 1.0);
-					
-					StringArray terms=aPattern.getKeyterms();
-					terms.set(0,fullGene);
-
-					keyterms.add(aPattern);
-					*/
+					debug ("Found full pattern: " + fullGene);
 					
 					ArrayList<String> termList=new ArrayList<String> ();
 					termList.add(fullGene);
@@ -264,7 +255,8 @@ public class KeytermPattern extends AbstractKeytermExtractor
 	/**
 	 * 
 	 */
-	private ArrayList<String> cleanTokens(String[] aList) {
+	private ArrayList<String> cleanTokens(String[] aList) 
+	{
 		ArrayList<String> newList = new ArrayList<String>();
 
 		for (int i = 0; i < aList.length; i++) {
@@ -276,65 +268,95 @@ public class KeytermPattern extends AbstractKeytermExtractor
 	/**
 	 * 
 	 */
-	private void printGenePatterns() {
-		debug("printGenePatterns ()");
+	private Boolean isUpperCase(String str)
+	{
+		//debug ("isUpperCase ("+str+")");
+	
+		boolean result=Pattern.matches(stubPattern,str);
+		
+		//debug ("Result: " + result);
 
-		for (int i = 0; i < matchTokens.size(); i++) {
-			GenTokenSequence seq = matchTokens.get(i);
-
-			StringBuffer formatter = new StringBuffer();
-
-			for (int j = 0; j < seq.tokens.size(); j++) {
-				if (j > 0)
-					formatter.append(",");
-
-				formatter.append(seq.tokens.get(j));
-			}
-
-			debug("Pattern: " + formatter.toString());
-		}
-	}	
+		return (result);
+	}		
 	/**
 	 * 
 	 */
-	private Boolean isStub(String aToken) {
-		if (stubs != null) {
-			for (int i = 0; i < stubs.size(); i++) {
-				if (aToken.indexOf(stubs.get(i)) != -1)
+	private Boolean isStub(String aToken) 
+	{
+		//debug ("isStub ("+aToken+")");
+		
+		if (stubs != null) 
+		{
+			for (int i = 0; i < stubs.size(); i++) 
+			{
+				if (aToken.toLowerCase().indexOf(stubs.get(i)) != -1)
+				{
+					debug ("MATCH Stub: " + stubs.get(i));
 					return (true);
+				}
 			}
 		}
 
-		return (false);
-	}
-
-	/**
-	 * 
-	 */
-	private Boolean isGarbage(String aToken) {
-		if (stopList != null) {
-			if (stopList.get(aToken) != null)
-				return (true);
+		if (isUpperCase (aToken))
+		{
+			debug ("MATCH: uppercase/alphanumeric heuristic");
+			return (true);
 		}
-
+		
 		return (false);
 	}
 
 	/**
 	 * 
 	 */
-	private String isMatchedGene(String aToken, ArrayList<String> aTokenList,
-			int anIndex) {
-		// debug ("isMatchedGene ("+aToken+" <aTokenList> " + anIndex + ")");
+	private Boolean isGarbage(String aToken) 
+	{
+		//debug ("isGarbage ("+aToken.toLowerCase()+") -> " + stopList.size());
+		
+		if (stopList != null) 
+		{			
+			/*
+			if (stopList.containsKey(aToken.toLowerCase())==true)
+			{
+				debug ("Determined that " + aToken + " is a stopword");
+				return (true);
+			}
+			*/
+			
+		    Iterator it = stopList.entrySet().iterator();
+		    while (it.hasNext()) 
+		    {
+		        Map.Entry pairs = (Map.Entry)it.next();
+		        
+		        String checker=(String) pairs.getKey();
+		        		        if (checker.equalsIgnoreCase(aToken)==true)
+		        {
+		        	//debug ("Determined that " + aToken + " is a stopword");
+		        	return (true);
+		        }		       
+		    }			
+		}
+		else
+			debug ("Error: no stop list available!");
+		
+		return (false);
+	}
 
-		// debug ("Matching against " + matchTokens.size() + " gene patterns");
+	/**
+	 * 
+	 */
+	private String isMatchedGene(String aToken, ArrayList<String> aTokenList,int anIndex) 
+	{
+		//debug ("isMatchedGene ("+aToken+" <aTokenList> " + anIndex + ")");
+
+		//debug ("Matching against " + matchTokens.size() + " gene patterns");
 
 		for (int i = 0; i < matchTokens.size(); i++) {
 			GenTokenSequence seq = matchTokens.get(i);
 
 			int ptSize = seq.tokens.size();
 
-			// debug ("Looking at pattern of size: " + ptSize);
+			//debug ("Looking at pattern of size: " + ptSize);
 
 			int matched = 0;
 
@@ -343,7 +365,7 @@ public class KeytermPattern extends AbstractKeytermExtractor
 					String fromList = aTokenList.get(anIndex + j);
 					String toList = seq.tokens.get(j);
 
-					// debug ("Comparing " + fromList + " to " + toList);
+					//debug ("Comparing " + fromList + " to " + toList);
 
 					if (fromList.equals(toList))
 						matched++;
@@ -353,8 +375,9 @@ public class KeytermPattern extends AbstractKeytermExtractor
 			// See if we've matched all the tokens. If there is a partial match
 			// we can see if we can incorporate that score at some point
 
-			if (matched == seq.tokens.size()) {
-				// debug ("MATCHED!");
+			if (matched == seq.tokens.size()) 
+			{
+				debug ("MATCHED!");
 
 				StringBuffer formatter = new StringBuffer();
 
@@ -370,5 +393,43 @@ public class KeytermPattern extends AbstractKeytermExtractor
 		}
 
 		return (null);
+	}
+	/**
+	 * 
+	 */
+	public void printGenePatterns() 
+	{
+		debug("printGenePatterns ()");
+
+		for (int i = 0; i < matchTokens.size(); i++) 
+		{
+			GenTokenSequence seq = matchTokens.get(i);
+
+			StringBuffer formatter = new StringBuffer();
+
+			for (int j = 0; j < seq.tokens.size(); j++) 
+			{
+				if (j > 0)
+					formatter.append(",");
+
+				formatter.append(seq.tokens.get(j));
+			}
+
+			debug("Pattern: " + formatter.toString());
+		}
 	}	
+	/**
+	 * 
+	 * @param mp
+	 */
+	public void printStopwords(Map mp) 
+	{
+	    Iterator it = mp.entrySet().iterator();
+	    while (it.hasNext()) 
+	    {
+	        Map.Entry pairs = (Map.Entry)it.next();
+	        debug ("["+pairs.getKey() + "] = " + pairs.getValue());
+	        it.remove(); // avoids a ConcurrentModificationException
+	    }
+	}		
 }

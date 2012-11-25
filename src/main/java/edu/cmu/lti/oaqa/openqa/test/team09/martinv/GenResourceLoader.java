@@ -129,13 +129,16 @@ public class GenResourceLoader extends GenBase {
 	/**
 	 * 
 	 */
-	public String getTextResource2(String aFile) {
+	public String getTextResource2(String aFile) 
+	{
 		debug("getTextResouce2 ()");
 
-		try {
-			debug(getClass().getClassLoader().getResource(aFile).toURI()
-					.toString());
-		} catch (URISyntaxException e1) {
+		try 
+		{
+			debug(getClass().getClassLoader().getResource(aFile).toURI().toString());
+		} 
+		catch (URISyntaxException e1) 
+		{
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 			return (null);
@@ -143,10 +146,12 @@ public class GenResourceLoader extends GenBase {
 
 		File file = null;
 
-		try {
-			file = new File(getClass().getClassLoader().getResource(aFile)
-					.toURI());
-		} catch (URISyntaxException e) {
+		try 
+		{
+			file = new File(getClass().getClassLoader().getResource(aFile).toURI());
+		} 
+		catch (URISyntaxException e) 
+		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return (null);
