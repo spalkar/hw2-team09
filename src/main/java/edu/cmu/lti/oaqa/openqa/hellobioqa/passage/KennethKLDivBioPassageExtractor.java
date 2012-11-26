@@ -31,11 +31,11 @@ public class KennethKLDivBioPassageExtractor extends SimplePassageExtractor {
         // cleaning HTML text
         String text = Jsoup.parse(htmlText).text().replaceAll("([\177-\377\0-\32]*)", "")/* .trim() */;
         // for now, making sure the text isn't too long
-        text = text.substring(0, Math.min(5000, text.length()));
-        System.out.println(text);
+        //text = text.substring(0, Math.min(5000, text.length()));
+        //System.out.println(text);
 
-        PassageCandidateFinder finder = new PassageCandidateFinder(id, text,
-                new KeytermWindowScorerSum());
+        KennethKLDivPassageCandidateFinder finder = new KennethKLDivPassageCandidateFinder(id, text,
+                new KeytermWindowScorerKennethKLDiv());
         List<String> keytermStrings = Lists.transform(keyterms, new Function<Keyterm, String>() {
           public String apply(Keyterm keyterm) {
             return keyterm.getText();
