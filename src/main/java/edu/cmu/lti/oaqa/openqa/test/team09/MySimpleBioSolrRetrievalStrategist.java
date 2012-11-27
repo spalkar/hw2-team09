@@ -27,7 +27,7 @@ public class MySimpleBioSolrRetrievalStrategist extends AbstractRetrievalStrateg
   // queryConfig can be DEFAULT which is one query with all keyterms whitespace separated
   // queryConfig can also be CUSTOM which calls the retrieveDocumentsIndv function that 
   // searches documents one keyterm based query at a time (with or without wildcards)
-  private String queryConfig = "CUSTOM";
+  private String queryConfig = "DEFAULT";
 
   @Override
   public void initialize(UimaContext aContext) throws ResourceInitializationException {
