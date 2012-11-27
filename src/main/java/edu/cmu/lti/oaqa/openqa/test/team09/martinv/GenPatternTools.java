@@ -72,6 +72,8 @@ public class GenPatternTools extends GenBase
 			
 			formatter.append(aTerms.get (i));
 		}
+	
+		GenBase.debug("GenPatternTools","Encoded: " + formatter.toString());
 		
 		return (new Keyterm (formatter.toString()));
 	}
@@ -101,14 +103,20 @@ public class GenPatternTools extends GenBase
 		
 		newPattern.sentence=parts [1];
 		newPattern.score=Float.parseFloat(parts [2]);
-		String termsRaw=parts [3];
 		
-		String terms []=termsRaw.split("\\,");
-						
-		for (int i=0;i<terms.length;i++)
+		if (parts.length>3)
 		{
-			newPattern.keyterms.add(terms [i]);
+			String termsRaw=parts [3];
+		
+			String terms []=termsRaw.split("\\,");
+						
+			for (int i=0;i<terms.length;i++)
+			{
+				newPattern.keyterms.add(terms [i]);
+			}
 		}
+		else
+			GenBase.debug("GenPatternTools","Error: no keyterms found in pattern");
 		
 		return (newPattern);
 	}

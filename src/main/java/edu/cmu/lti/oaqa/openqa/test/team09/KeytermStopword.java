@@ -97,6 +97,8 @@ public class KeytermStopword extends AbstractKeytermExtractor
 		String[] split = cleaned.split("\\s+");
 
 		ArrayList<String> cleanedTokens = cleanTokens(split);
+		
+		ArrayList<String> termList=new ArrayList<String> ();
 
 		int index = 0;
 
@@ -107,18 +109,17 @@ public class KeytermStopword extends AbstractKeytermExtractor
 			// First pass, remove garbage ...
 
 			if (isGarbage(aToken) == false) 
-			{											
-				ArrayList<String> termList=new ArrayList<String> ();
-				termList.add(aToken);
-				
-				Keyterm aPattern=GenPatternTools.encodeKeyterm(question,(float) 1.0,termList);
-				
-				keyterms.add(aPattern);
+			{															
+				termList.add(aToken);				
 			}
 
 			index += aToken.length();
 			index++; // don't forget the white space
 		}		
+		
+		Keyterm aPattern=GenPatternTools.encodeKeyterm(question,(float) 1.0,termList);
+		
+		keyterms.add(aPattern);
 		
 	    return keyterms;
 	}

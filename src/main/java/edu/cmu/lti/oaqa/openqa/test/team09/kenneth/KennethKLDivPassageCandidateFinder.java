@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-package edu.cmu.lti.oaqa.openqa.hellobioqa.passage;
+package edu.cmu.lti.oaqa.openqa.test.team09.kenneth;
 
 import java.util.ArrayList;
 import java.util.Comparator;

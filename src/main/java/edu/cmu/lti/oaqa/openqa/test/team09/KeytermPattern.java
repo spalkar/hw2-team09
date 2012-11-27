@@ -172,6 +172,8 @@ public class KeytermPattern extends AbstractKeytermExtractor
 		debug ("getKeyterms ("+cleaned+")");
 		
 		List<Keyterm> keyterms = new ArrayList<Keyterm>();
+		
+		ArrayList<String> termList=new ArrayList<String> ();
 												
 		String[] split = cleaned.split("\\s+");
 
@@ -199,30 +201,25 @@ public class KeytermPattern extends AbstractKeytermExtractor
 					{						
 						debug ("Found keyword: " + aToken);
 												
-						ArrayList<String> termList=new ArrayList<String> ();
-						termList.add(aToken);
-						
-						Keyterm aPattern=GenPatternTools.encodeKeyterm(cleaned,(float) 1.0,termList);
-						
-						keyterms.add(aPattern);						
+						//ArrayList<String> termList=new ArrayList<String> ();
+						termList.add(aToken);												
 					}
 				} 
 				else 
 				{
 					debug ("Found full pattern: " + fullGene);
 					
-					ArrayList<String> termList=new ArrayList<String> ();
-					termList.add(fullGene);
-					
-					Keyterm aPattern=GenPatternTools.encodeKeyterm(cleaned,(float) 1.0,termList);
-					
-					keyterms.add(aPattern);
+					termList.add(fullGene);					
 				}
 			}
 
 			index += aToken.length();
 			index++; // don't forget the white space
 		}		
+		
+		Keyterm aPattern=GenPatternTools.encodeKeyterm(cleaned,(float) 1.0,termList);
+		
+		keyterms.add(aPattern);
 		
 	    return keyterms;
 	}
