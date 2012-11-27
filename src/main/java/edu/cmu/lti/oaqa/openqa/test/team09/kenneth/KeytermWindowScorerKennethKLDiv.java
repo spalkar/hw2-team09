@@ -22,7 +22,13 @@ import edu.cmu.lti.oaqa.openqa.hello.passage.KeytermWindowScorer;
 
 public class KeytermWindowScorerKennethKLDiv implements KeytermWindowScorer {
 	
+	public KeytermWindowScorerKennethKLDiv(){
+	}
+	
 	public double getKLDiv(String[] wordArray, String[] keyterms){
+		
+		System.out.println(wordArray.toString());
+		System.out.println(keyterms.toString());
 
 		Hashtable<String, Integer> wordHash = buildWordHash(wordArray, keyterms);
 		int[] countP = wordToCount(wordArray, wordHash);
