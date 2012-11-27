@@ -16,6 +16,7 @@
 
 package edu.cmu.lti.oaqa.openqa.test.team09.kenneth;
 
+import java.util.ArrayList;
 import java.util.Hashtable;
 
 import edu.cmu.lti.oaqa.openqa.hello.passage.KeytermWindowScorer;
@@ -27,6 +28,8 @@ public class KeytermWindowScorerKennethKLDiv implements KeytermWindowScorer {
 	
 	public double getKLDiv(String[] wordArray, String[] keyterms){
 		
+		keyterms = splitTerms(keyterms);
+		
 		System.out.println(wordArray.toString());
 		System.out.println(keyterms.toString());
 
@@ -35,6 +38,22 @@ public class KeytermWindowScorerKennethKLDiv implements KeytermWindowScorer {
 		int[] countQ = wordToCount(keyterms, wordHash);
 		return calKLDiv(new LM(countP), new LM(countQ));
 		
+	}
+	
+	private String[] splitTerms(String[] keyterms){
+		ArrayList<String> result = new ArrayList<String>();
+		for(int i=0;i<keyterms.length;i++){
+			String nowTerm = keyterms[i];
+			String[] splited = nowTerm.split("[\\s]+");
+			for(String word: splited){
+				result.add(word);
+			}
+		}
+		String[] finalResult = new String[result.size()];
+		for(int i=0;i<finalResult.length;i++){
+			finalResult[i] = result.get(i);
+		}
+		return finalResult;
 	}
 	
 	private double calKLDiv(LM p, LM q){
