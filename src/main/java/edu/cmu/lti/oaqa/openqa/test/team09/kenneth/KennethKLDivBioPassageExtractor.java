@@ -53,8 +53,17 @@ public class KennethKLDivBioPassageExtractor extends SimplePassageExtractor {
     return result;
   }
   
-  public static void main(String[] args){
+  /*public static void main(String[] args){
 	  
-  }
+	  String question = "What is the role of PrnP in mad cow disease?";
+	  
+	  List<Keyterm> keyterms = new ArrayList<Keyterm>();
+	  keyterms.add(new Keyterm("PrnP"));
+	  keyterms.add(new Keyterm("mad cow disease"));
+	  
+      List<RetrievalResult> documents = new ArrayList<RetrievalResult>();
+      String text = "PrnP is actually a protein. When a bunch of it folds improperly, it can form aggregates, generally on neural cells, which leads to mad cow. The normal protein won't misfold unless something causes it too. Normally, this is a misfolded protein somehow introduced into the system. That's the mystery about diseases like this (called prion diseases)- the causative agent is a protein. There are some theories about how one misfolded protein causes others to misfold also, but there's no sound data proving any of these theories.";
+      documents.add(new RetrievalResult(text)); 
+  }*/
 
 }
