@@ -184,16 +184,16 @@ public class GenResourceLoader extends GenBase {
 	/**
 	 * 
 	 */
-	public static String loadTextURL (String aResource)
+	public String loadTextURL (String aResource)
 	{
-		GenBase.debug("GenResourceLoader","loadTextURL ("+aResource+")");
+		debug("loadTextURL ("+aResource+")");
 		
 		StringBuffer formatted=new StringBuffer ();
 		
 	    try 
 	    {
 	        // Create a URL for the desired page
-	        URL url = new URL("http://www.cinndev.com/testFile.txt");
+	        URL url = new URL(aResource);
 	        
 	        BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
 	        
