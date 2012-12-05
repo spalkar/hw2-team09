@@ -28,6 +28,8 @@ public class KeytermWindowScorerKennethKLDiv implements KeytermWindowScorer {
 	
 	public double getKLDiv(String[] wordArray, String[] keyterms){
 		
+	  System.out.println("Calculate KL");
+	  
 		keyterms = splitTerms(keyterms);
 		
 		System.out.println(wordArray.toString());

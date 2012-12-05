@@ -102,6 +102,67 @@ public class KennethKLDivPassageCandidateFinder {
 		return result;
 
 	}
+	
+	public List<PassageCandidate> extractPassages( String[] keyterms, String[] spanTerms ) {
+	  
+    List<List<PassageSpan>> matchingSpans = new ArrayList<List<PassageSpan>>();
+    List<PassageSpan> matchedSpans = new ArrayList<PassageSpan>();
+    
+    // Find all keyterm matches.
+    for ( String keyterm : keyterms ) {
+      Pattern p = Pattern.compile( keyterm );
+      Matcher m = p.matcher( text );
+      while ( m.find() ) {
+        PassageSpan match = new PassageSpan( m.start() , m.end() ) ;
+        matchedSpans.add( match );
+        totalMatches++;
+      }
+      if (! matchedSpans.isEmpty() ) {
+        matchingSpans.add( matchedSpans );
+        totalKeyterms++;
+      }
+    }
+    
+    // create set of left edges and right edges which define possible windows.
+    List<Integer> leftEdges = new ArrayList<Integer>();
+    List<Integer> rightEdges = new ArrayList<Integer>();
+    for ( List<PassageSpan> keytermMatches : matchingSpans ) {
+      for ( PassageSpan keytermMatch : keytermMatches ) {
+        Integer leftEdge = keytermMatch.begin;
+        Integer rightEdge = keytermMatch.end; 
+        if (! leftEdges.contains( leftEdge ))
+          leftEdges.add( leftEdge );
+        if (! rightEdges.contains( rightEdge ))
+          rightEdges.add( rightEdge );
+      }
+    }
+    
+    // For every possible window, calculate keyterms found, matches found; score window, and create passage candidate.
+    List<PassageCandidate> result = new ArrayList<PassageCandidate>();
+    for ( Integer begin : leftEdges ) {
+      for ( Integer end : rightEdges ) {
+        if ( end <= begin ) continue; 
+        // This code runs for each window.
+        
+        String[] wordArray = text.substring(begin, end).split("[\\s]+");
+        double score = scorer.getKLDiv(wordArray, spanTerms);
+        //double score = scorer.scoreWindow( begin , end , matchesFound , totalMatches , keytermsFound , totalKeyterms , textSize );
+        PassageCandidate window = null;
+        try {
+          window = new PassageCandidate( docId , begin , end , (float) score , null );
+        } catch (AnalysisEngineProcessException e) {
+          e.printStackTrace();
+        }
+        result.add( window );
+      }
+    }
+    
+    // Sort the result in order of decreasing score.
+    // Collections.sort ( result , new PassageCandidateComparator() );
+    return result;
+
+  }
+	
 	private class PassageCandidateComparator implements Comparator {
 		// Ranks by score, decreasing.
 		public int compare( Object o1 , Object o2 ) {

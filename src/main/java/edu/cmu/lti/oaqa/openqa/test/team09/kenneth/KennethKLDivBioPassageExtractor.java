@@ -4,11 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.solr.client.solrj.SolrServerException;
+import org.apache.uima.UimaContext;
+import org.apache.uima.resource.ResourceInitializationException;
 import org.jsoup.Jsoup;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 
+import edu.cmu.lti.oaqa.core.provider.solr.SolrWrapper;
 import edu.cmu.lti.oaqa.framework.data.Keyterm;
 import edu.cmu.lti.oaqa.framework.data.PassageCandidate;
 import edu.cmu.lti.oaqa.framework.data.RetrievalResult;
