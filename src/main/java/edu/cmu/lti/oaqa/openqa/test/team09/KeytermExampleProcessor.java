@@ -19,17 +19,12 @@ package edu.cmu.lti.oaqa.openqa.test.team09;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.uima.UimaContext;
-import org.apache.uima.analysis_component.JCasAnnotator_ImplBase;
-import org.apache.uima.analysis_engine.AnalysisEngineProcessException;
 import org.apache.uima.jcas.JCas;
-import org.apache.uima.resource.ResourceInitializationException;
 
 import edu.cmu.lti.oaqa.framework.data.Keyterm;
 import edu.cmu.lti.oaqa.framework.data.KeytermList;
 import edu.cmu.lti.oaqa.openqa.test.team09.martinv.GenBase;
 import edu.cmu.lti.oaqa.openqa.test.team09.martinv.GenPattern;
-import edu.cmu.lti.oaqa.openqa.test.team09.martinv.GenPatternTools;
 
 /**
  * 
@@ -63,11 +58,13 @@ public class KeytermExampleProcessor extends KeytermExampleProcessorBase
 			// Very basic question reformulation by adding keywords, 
 			// replace or take out if you like
 			
+			/*
 			newTerm=new Keyterm ("What");
 			keytermResults.add(newTerm);
 			
 			newTerm=new Keyterm ("is");
 			keytermResults.add(newTerm);
+			*/
 		}
 		
 		if (aPattern.questionType==GenPattern.QUESTIONHOW)
@@ -77,11 +74,13 @@ public class KeytermExampleProcessor extends KeytermExampleProcessorBase
 			// Very basic question reformulation by adding keywords, 
 			// replace or take out if you like
 			
+			/*
 			newTerm=new Keyterm ("How");
 			keytermResults.add(newTerm);
 			
 			newTerm=new Keyterm ("does");
-			keytermResults.add(newTerm);			
+			keytermResults.add(newTerm);
+			*/			
 		}
 		
 		if (aPattern.questionType==GenPattern.QUESTIONGENERIC)

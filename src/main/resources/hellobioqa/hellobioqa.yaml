@@ -15,8 +15,8 @@ pipeline:
   - inherit: jdbc.sqlite.cse.phase  
     name: keyterm-extractor
     options: |
-      - inherit: hellobioqa.team09.keyterm-stopword
       - inherit: hellobioqa.team09.keyterm-pattern
+      - inherit: hellobioqa.team09.keyterm-lingpeng
 
   - inherit: jdbc.sqlite.cse.phase  
     name: keyterm-processor

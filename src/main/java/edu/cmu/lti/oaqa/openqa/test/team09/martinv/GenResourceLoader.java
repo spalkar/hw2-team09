@@ -18,9 +18,13 @@
 
 package edu.cmu.lti.oaqa.openqa.test.team09.martinv;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
 import java.net.URISyntaxException;
+import java.net.URL;
 
 import org.apache.uima.resource.ResourceManager;
 import org.apache.uima.util.FileUtils;
@@ -176,5 +180,43 @@ public class GenResourceLoader extends GenBase {
 		// debug (text);
 
 		return (text);
+	}
+	/**
+	 * 
+	 */
+	public static String loadTextURL (String aResource)
+	{
+		GenBase.debug("GenResourceLoader","loadTextURL ("+aResource+")");
+		
+		StringBuffer formatted=new StringBuffer ();
+		
+	    try 
+	    {
+	        // Create a URL for the desired page
+	        URL url = new URL("http://www.cinndev.com/testFile.txt");
+	        
+	        BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
+	        
+	        String str;
+	        
+	        while ((str = in.readLine()) != null) 
+	        {
+	        	//GenBase.debug("GenResourceLoader","Error: " + str);
+	        	formatted.append(str);
+	        	formatted.append("\n");
+	        }
+	        
+	        in.close();
+	    } 
+	    catch (MalformedURLException e) 
+	    {
+	        
+	    } 
+	    catch (IOException e) 
+	    {
+	    	
+	    }
+	    
+	    return (formatted.toString());
 	}
 }

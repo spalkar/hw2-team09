@@ -55,7 +55,7 @@ public class KeytermPattern extends AbstractKeytermExtractor
 	
 	private String stopwordFile = "data/stoplist.txt";
 	private String patternFile = "data/patterns-raw.txt";
-	private String stubFile = "data/stubs.txt";
+	//private String stubFile = "data/stubs.txt";
 
 	private HashMap<String, Integer> stopList = null;
 	private ArrayList<GenTokenSequence> matchTokens = null;
@@ -103,21 +103,44 @@ public class KeytermPattern extends AbstractKeytermExtractor
 
 		// >----------------------------------------------------------
 
+		/*
 		text = loader.getTextResource2(stubFile);
 
 		if (text == null) {
 			debug("Input error, unable to read stub file: " + stubFile);
 			return;
 		}
+		*/
 
 		stubs = new ArrayList<String>();
 
+		/*
 		lines = text.split("\\n");
 
 		for (i = 0; i < lines.length; i++) {
 			String aWord = lines[i];
 			stubs.add(aWord.toLowerCase());
 		}
+		*/
+		
+		stubs.add("alk");
+		stubs.add("glut");
+		stubs.add("carb");
+		stubs.add("anhy");
+		stubs.add("nucleo");
+		stubs.add("cryo");
+		stubs.add("fibr");
+		stubs.add("transpep");
+		stubs.add("antig");
+		stubs.add("albu");
+		stubs.add("amni");
+		stubs.add("tryp");
+		stubs.add("-plasmi");
+		stubs.add("enase");
+		stubs.add("cerul");
+		stubs.add("thromb");
+		stubs.add("kalli");
+		stubs.add("prnp");
 
 		debug("Loaded " + stubs.size() + " stubs");
 
@@ -216,6 +239,16 @@ public class KeytermPattern extends AbstractKeytermExtractor
 			index += aToken.length();
 			index++; // don't forget the white space
 		}		
+		
+		if (termList.size()==0)
+		{
+			for (int j = 0; j < cleanedTokens.size(); j++) 
+			{
+				String aToken = cleanedTokens.get(j);
+				
+				termList.add(aToken);	
+			}	
+		}
 		
 		Keyterm aPattern=GenPatternTools.encodeKeyterm(cleaned,(float) 1.0,termList);
 		
