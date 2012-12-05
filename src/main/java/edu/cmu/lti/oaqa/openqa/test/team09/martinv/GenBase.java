@@ -18,6 +18,9 @@
 
 package edu.cmu.lti.oaqa.openqa.test.team09.martinv;
 
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -28,23 +31,47 @@ import java.util.Date;
  * out to keep the code light and understandable. The current version implements
  * the debug format for real time debugging within the Hoop interface.
  */
-public class GenBase {
+public class GenBase 
+{
 	private SimpleDateFormat df;
 	private String instanceName = "Undefined";
 	private String className = "HoopBase";
-	private String classType = "Unknown"; // Used for serialization and should
-											// be a base type
+	private String classType = "Unknown"; // Used for serialization and should be a base type
 
+	public static boolean logToDisk=false;
+	
 	public static int debugLine = 0;
-
+	
+	public static FileWriter dbgFile=null;
+	public static PrintWriter dbgOut = null;
+	
 	/**
 	 *
 	 */
-	public GenBase() {
+	public GenBase() 
+	{
 		setClassName("GenBase");
 		debug("GenBase ()");
 
 		df = new SimpleDateFormat("HH:mm:ss.SSS");
+		
+		if (GenBase.logToDisk==true)
+		{
+			if (GenBase.dbgFile==null)
+			{
+				try 
+				{
+					GenBase.dbgFile = new FileWriter("log.txt");
+					GenBase.dbgOut=new PrintWriter(GenBase.dbgFile);
+				} 
+				catch (IOException e) 
+				{
+					GenBase.dbgFile=null;
+					GenBase.dbgOut=null;
+					e.printStackTrace();
+				}
+			}	
+		}	
 	}
 
 	/**
@@ -100,24 +127,42 @@ public class GenBase {
 				generateFileTimestamp(), ++GenBase.debugLine, s));
 
 		System.out.print(buffer.toString());
+		
+		if (GenBase.logToDisk==true)
+		{
+			if (GenBase.dbgOut!=null)
+			{
+				dbgOut.print(buffer.toString());
+			}
+		}	
 	}
 
 	/**
 	 *
 	 */
-	public void debug(String s) {
+	public void debug(String s) 
+	{
 		StringBuffer buffer = new StringBuffer();
 
 		buffer.append(String.format("[%s] [%d] <" + className + "> %s\n",
 				generateFileTimestamp(), ++GenBase.debugLine, s));
 
 		System.out.print(buffer.toString());
+		
+		if (GenBase.logToDisk==true)
+		{
+			if (GenBase.dbgOut!=null)
+			{
+				dbgOut.print(buffer.toString());
+			}
+		}	
 	}
 
 	/**
 	 *
 	 */
-	public String getName() {
+	public String getName() 
+	{
 		return instanceName;
 	}
 

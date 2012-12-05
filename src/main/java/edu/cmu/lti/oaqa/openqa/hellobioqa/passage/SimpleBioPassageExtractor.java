@@ -13,43 +13,77 @@ import edu.cmu.lti.oaqa.framework.data.Keyterm;
 import edu.cmu.lti.oaqa.framework.data.PassageCandidate;
 import edu.cmu.lti.oaqa.framework.data.RetrievalResult;
 import edu.cmu.lti.oaqa.openqa.hello.passage.KeytermWindowScorerSum;
-import edu.cmu.lti.oaqa.openqa.hello.passage.PassageCandidateFinder;
+//import edu.cmu.lti.oaqa.openqa.hello.passage.PassageCandidateFinder;
 import edu.cmu.lti.oaqa.openqa.hello.passage.SimplePassageExtractor;
+import edu.cmu.lti.oaqa.openqa.test.team09.PassageFinder;
+import edu.cmu.lti.oaqa.openqa.test.team09.martinv.GenBase;
 
-public class SimpleBioPassageExtractor extends SimplePassageExtractor {
+/**
+ * 
+ */
+public class SimpleBioPassageExtractor extends SimplePassageExtractor 
+{
+	/**
+	 * Internal method accessing Hoop debugging
+	 */
+	private void debug(String aMessage) 
+	{
+		GenBase.debug("SimpleBioPassageExtractor", aMessage);
+	}
+	/**
+	 * 
+	 */
+	@Override
+	protected List<PassageCandidate> extractPassages (String question,
+													  List<Keyterm> keyterms,
+													  List<RetrievalResult> documents) 
+	{
+		debug ("extractPassages ()");
+		
+		List<PassageCandidate> result = new ArrayList<PassageCandidate>();
+		
+		for (RetrievalResult document : documents) 
+		{
+			debug ("RetrievalResult: " + document.toString());
+			
+			String id = document.getDocID();
+			
+			try 
+			{
+				String htmlText = wrapper.getDocText(id);
 
-  @Override
-  protected List<PassageCandidate> extractPassages(String question, List<Keyterm> keyterms,
-          List<RetrievalResult> documents) {
-    List<PassageCandidate> result = new ArrayList<PassageCandidate>();
-    for (RetrievalResult document : documents) {
-      System.out.println("RetrievalResult: " + document.toString());
-      String id = document.getDocID();
-      try {
-        String htmlText = wrapper.getDocText(id);
+				// cleaning HTML text
+				String text = Jsoup.parse(htmlText).text().replaceAll("([\177-\377\0-\32]*)", "")/* .trim() */;
+				
+				// for now, making sure the text isn't too long
+				text = text.substring(0, Math.min(5000, text.length()));
+				
+				debug ("Text: " + text);
 
-        // cleaning HTML text
-        String text = Jsoup.parse(htmlText).text().replaceAll("([\177-\377\0-\32]*)", "")/* .trim() */;
-        // for now, making sure the text isn't too long
-        text = text.substring(0, Math.min(5000, text.length()));
-        System.out.println(text);
-
-        PassageCandidateFinder finder = new PassageCandidateFinder(id, text,
-                new KeytermWindowScorerSum());
-        List<String> keytermStrings = Lists.transform(keyterms, new Function<Keyterm, String>() {
-          public String apply(Keyterm keyterm) {
-            return keyterm.getText();
-          }
-        });
-        List<PassageCandidate> passageSpans = finder.extractPassages(keytermStrings
-                .toArray(new String[0]));
-        for (PassageCandidate passageSpan : passageSpans)
-          result.add(passageSpan);
-      } catch (SolrServerException e) {
-        e.printStackTrace();
-      }
-    }
-    return result;
-  }
-
+				//PassageCandidateFinder finder = new PassageCandidateFinder(id, text, new KeytermWindowScorerSum());
+				PassageFinder finder = new PassageFinder (id, text, new KeytermWindowScorerSum());
+				
+				List<String> keytermStrings = Lists.transform(keyterms, new Function<Keyterm, String>() 
+				{
+					public String apply(Keyterm keyterm) 
+					{
+						return keyterm.getText();
+					}
+				});
+				
+				List<PassageCandidate> passageSpans = finder.extractPassages(keytermStrings.toArray(new String[0]));
+				
+				for (PassageCandidate passageSpan : passageSpans)
+				{
+					result.add(passageSpan);
+				}
+			} 
+			catch (SolrServerException e) 
+			{
+				e.printStackTrace();
+			}
+		}
+		
+		return result;
+	}
 }
