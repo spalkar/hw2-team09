@@ -15,7 +15,6 @@ pipeline:
   - inherit: jdbc.sqlite.cse.phase  
     name: keyterm-extractor
     options: |
-      - inherit: hellobioqa.team09.keyterm-pattern
       - inherit: hellobioqa.team09.keyterm-lingpeng
 
   - inherit: jdbc.sqlite.cse.phase  
@@ -31,8 +30,8 @@ pipeline:
   - inherit: jdbc.sqlite.cse.phase  
     name: passage-extractor
     options: |
-      - inherit: hellobioqa.passage.simple
-      
+      - inherit: hellobioqa.team09.lingpengext
+ 
   - inherit: helloqa.eval.keyterm-aggregator-consumer
 
   - inherit: jdbc.eval.retrieval-aggregator-consumer

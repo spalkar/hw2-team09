@@ -28,10 +28,12 @@ public class KeytermWindowScorerKennethKLDiv implements KeytermWindowScorer {
 	
 	public double getKLDiv(String[] wordArray, String[] keyterms){
 		
+	  //System.out.println("Calculate KL");
+	  
 		keyterms = splitTerms(keyterms);
 		
-		System.out.println(wordArray.toString());
-		System.out.println(keyterms.toString());
+		//System.out.println(wordArray.toString());
+		//System.out.println(keyterms.toString());
 
 		Hashtable<String, Integer> wordHash = buildWordHash(wordArray, keyterms);
 		int[] countP = wordToCount(wordArray, wordHash);

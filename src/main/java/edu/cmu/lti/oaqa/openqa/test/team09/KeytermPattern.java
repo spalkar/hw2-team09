@@ -53,9 +53,11 @@ public class KeytermPattern extends AbstractKeytermExtractor
 	private static final String stubPatternMain ="[A-Z]+-*[A-Z]*[0-9]*"; //alpha-numeric uppercase
 	private static final String stubPatternSecondary ="[a-zA-Z]+-[0-9]*"; //alpha-numeric uppercase
 	
-	private String stopwordFile = "data/stoplist.txt";
-	private String patternFile = "data/patterns-raw.txt";
-	//private String stubFile = "data/stubs.txt";
+	//private String stopwordFile = "data/stoplist.txt";
+	//private String patternFile = "data/patterns-raw.txt";
+	
+	private String stopwordFile = "http://augustus.pslc.cs.cmu.edu/seit/data/stoplist.txt";
+	private String patternFile = "http://augustus.pslc.cs.cmu.edu/seit/data/patterns-raw.txt";
 
 	private HashMap<String, Integer> stopList = null;
 	private ArrayList<GenTokenSequence> matchTokens = null;
@@ -82,7 +84,8 @@ public class KeytermPattern extends AbstractKeytermExtractor
 
 		int i = 0;
 
-		String text = loader.getTextResource2(stopwordFile);
+		//String text = loader.getTextResource2(stopwordFile);
+		String text=loader.loadTextURL(stopwordFile);
 
 		if (text == null) {
 			debug("Input error, unable to read stopword file: " + stopwordFile);
@@ -100,28 +103,6 @@ public class KeytermPattern extends AbstractKeytermExtractor
 		}
 
 		debug("Loaded " + stopList.size() + " stopwords");
-
-		// >----------------------------------------------------------
-
-		/*
-		text = loader.getTextResource2(stubFile);
-
-		if (text == null) {
-			debug("Input error, unable to read stub file: " + stubFile);
-			return;
-		}
-		*/
-
-		stubs = new ArrayList<String>();
-
-		/*
-		lines = text.split("\\n");
-
-		for (i = 0; i < lines.length; i++) {
-			String aWord = lines[i];
-			stubs.add(aWord.toLowerCase());
-		}
-		*/
 		
 		stubs.add("alk");
 		stubs.add("glut");
@@ -145,8 +126,9 @@ public class KeytermPattern extends AbstractKeytermExtractor
 		debug("Loaded " + stubs.size() + " stubs");
 
 		// >----------------------------------------------------------
-
-		text = loader.getTextResource2(patternFile);
+				
+		//text = loader.getTextResource2(patternFile);
+		text=loader.loadTextURL(patternFile);		
 		
 		//debug (text);
 
